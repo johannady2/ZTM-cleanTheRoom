@@ -17,12 +17,14 @@ function organizeArray(arr)
 }
 
 
-function groupSimilarValues(arr,refP,currentStateOfFinalArray)
+function groupSimilarValues(arr,refP,currentStateOfFinalArray,csci)
 {
     let startHere = 0;
     let referencePoint = refP;
     let currentState = currentStateOfFinalArray; //when recurssion of the function occurs, the last state is passed to this parameter.
     let tempArray = []; //alwaysEmpty when function starts
+    let duplicateArraysCounter = 0;
+    let currentStateCurrentIndex = csci;
 
     for(startHere=0;startHere<arr.length;startHere++)
     {
@@ -31,11 +33,20 @@ function groupSimilarValues(arr,refP,currentStateOfFinalArray)
         if(arr[referencePoint] === arr[startHere])
         {
             tempArray.push(arr[startHere]);
+           if(arr[startHere] != arr[startHere+1])
+            {
+                console.log(`we are now at the last duplicate of ${arr[startHere]}. next value is ${arr[startHere+1]}`);
+            }
+            else
+            {
+                duplicateArraysCounter++;
+                
+            }
         }
 
     }
 
-    
+    console.log(`${duplicateArraysCounter} must be removed`);
 
     if(referencePoint < (arr.length))
     {
@@ -59,12 +70,16 @@ function groupSimilarValues(arr,refP,currentStateOfFinalArray)
 
         console.log(`new value of reference point is ${referencePoint}`);
       
-     
-        groupSimilarValues(arr,referencePoint,currentState);
+        // currentState.splice(currentStateCurrentIndex,duplicateArraysCounter);
+        // console.log(`${duplicateArraysCounter} has been removed starting from index ${currentStateCurrentIndex} of currentState`);
+        // currentStateCurrentIndex++;
+        groupSimilarValues(arr,referencePoint,currentState,currentStateCurrentIndex);
     }
     else
     {
         currentState = removeUndefinedFromArray(currentState);
+        
+        
         console.log(currentState);
         return currentState;
     }
@@ -81,4 +96,4 @@ function removeUndefinedFromArray(arrayWithUndefineds)
 
 let sortedArray =  organizeArray(inputArray);
 console.log(sortedArray);
-groupSimilarValues(sortedArray,0,[]);
+groupSimilarValues(sortedArray,0,[],0);
