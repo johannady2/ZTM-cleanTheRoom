@@ -17,74 +17,93 @@ function organizeArray(arr)
 }
 
 
-function groupSimilarValues(arr,refP,currentStateOfFinalArray,csci)
+function groupSimilarValues(arr,refP,currentStateOfFinalArray)
 {
-    let startHere = 0;
-    let referencePoint = refP;
-    let currentState = currentStateOfFinalArray; //when recurssion of the function occurs, the last state is passed to this parameter.
-    let tempArray = []; //alwaysEmpty when function starts
-    let duplicateArraysCounter = 0;
-    let currentStateCurrentIndex = csci;
+    
 
-    for(startHere=0;startHere<arr.length;startHere++)
-    {
-        
-        //console.log(`${arr[referencePoint]} and ${arr[startHere]}`);
-        if(arr[referencePoint] === arr[startHere])
+   
+        let startHere = 0;
+        let referencePoint = refP;
+        let currentState = currentStateOfFinalArray; //when recurssion of the function occurs, the last state is passed to this parameter.
+        let tempArray = []; //alwaysEmpty when function starts
+
+       
+
+ 
+
+  
+        for(startHere=0;startHere<arr.length;startHere++)
         {
-            tempArray.push(arr[startHere]);
-           if(arr[startHere] != arr[startHere+1])
+            
+            //console.log(`${arr[referencePoint]} and ${arr[startHere]}`);
+            if(arr[referencePoint] === arr[startHere])
             {
-                console.log(`we are now at the last duplicate of ${arr[startHere]}. next value is ${arr[startHere+1]}`);
+                tempArray.push(arr[startHere]);
+        
+            }
+
+        }
+
+     // if(referencePoint > 0 && currentState[currentState.length-2][0] !== arr[refP])
+    //  {
+        console.log(arr[refP] + '----' + currentState[currentState.length-2]);
+
+        if(referencePoint < (arr.length))
+        {
+
+
+            console.log(`before splice: ${currentState}`);
+        
+            //currentState.splice(currentState.length,0, ...tempArray);//always splices at the end of the array
+            if(tempArray.length > 1)
+            {
+                currentState = currentState.concat([tempArray],undefined);
+            
             }
             else
             {
-                duplicateArraysCounter++;
+                currentState = currentState.concat(tempArray[0],undefined);
                 
             }
-        }
+            console.log(`after splice: ${currentState}`);
+            referencePoint++;
 
-    }
-
-    console.log(`${duplicateArraysCounter} must be removed`);
-
-    if(referencePoint < (arr.length))
-    {
-
-
-        console.log(`before splice: ${currentState}`);
-      
-        //currentState.splice(currentState.length,0, ...tempArray);//always splices at the end of the array
-        if(tempArray.length > 1)
-        {
-            currentState = currentState.concat([tempArray],undefined);
-           
+            console.log(`new value of reference point is ${referencePoint}`);
+            
+            // if(currentState[currentState.length-2].length > 1)
+            // {
+            // console.log('below is currentState[currentState.length-2]:');
+            // console.log(currentState[currentState.length-2][0]);
+            // }
+            // else
+            // {
+            //     console.log(currentState[currentState.length-2]);
+            
+            // }
+            groupSimilarValues(arr,referencePoint,currentState);
+            
         }
         else
         {
-            currentState = currentState.concat(tempArray[0],undefined);
+            currentState = removeUndefinedFromArray(currentState);
             
+            
+            console.log(currentState);
+            return currentState;
         }
-        console.log(`after splice: ${currentState}`);
-        referencePoint++;
+//     }     
+//    else
+//      {
+           
+               
+            
+//         console.log(arr[refP] + '----' + currentState[currentState.length-2]);
+ 
 
-        console.log(`new value of reference point is ${referencePoint}`);
-      
-        //failed to target the correct spot of currentState to splice (to removed duplicate arrays)
-        // currentState.splice(currentStateCurrentIndex,duplicateArraysCounter);
-        // console.log(`${duplicateArraysCounter} has been removed starting from index ${currentStateCurrentIndex} of currentState`);
-        // currentStateCurrentIndex++;
-        groupSimilarValues(arr,referencePoint,currentState,currentStateCurrentIndex);
-    }
-    else
-    {
-        currentState = removeUndefinedFromArray(currentState);
-        
-        
-        console.log(currentState);
-        return currentState;
-    }
+//     }
 }
+
+
 
 function removeUndefinedFromArray(arrayWithUndefineds)
 {
@@ -97,4 +116,4 @@ function removeUndefinedFromArray(arrayWithUndefineds)
 
 let sortedArray =  organizeArray(inputArray);
 console.log(sortedArray);
-groupSimilarValues(sortedArray,0,[],0);
+groupSimilarValues(sortedArray,0,[]);
