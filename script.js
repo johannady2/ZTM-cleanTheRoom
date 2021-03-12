@@ -5,7 +5,7 @@
 // Bonus: Make it so it organizes strings differently from number types.
 // i.e. [1, "2", "3", 2] should return [[1,2], ["2", "3"]]
 
-//useful tutorial
+//useful tutorial.
 //https://www.youtube.com/watch?v=MWD-iKzR2c8&list=PLUp2SeJP6HNB4UmTFyAbvmiVmfi0tpWlH&index=6
 
 let inputArray = [1,2,4,591,392,391,2,5,10,2,1,1,1,20,20];
@@ -16,23 +16,15 @@ function organizeArray(arr)
     return arr.sort();//also sorts alphabetically. sorts numbers first, then capital letters first, then lower case letters
 }
 
-
 function groupSimilarValues(arr,refP,currentStateOfFinalArray)
 {
-    
-
-   
-        let startHere = 0;
-        let referencePoint = refP;
+        let referencePoint = refP;//to be used as an index of arr. arr[referencePoint] indicates which part of the inputed array we are currently processing.
+                                //referencePoint gets incremented near the end of the function and the function is called again within itself, while passing the new value of refP.
+                                //Thus letting us redo the same process on the next index of arr.
         let currentState = currentStateOfFinalArray; //when recurssion of the function occurs, the last state is passed to this parameter.
-        let tempArray = []; //alwaysEmpty when function starts
-
-       
-
+        let tempArray = []; //alwaysEmpty when function starts. This array will contain any values that are similar to arr[refP]. If tempArray.length > 1, it will then be inserted inside currentState turning currentState into an nested array.
  
-
-  
-        for(startHere=0;startHere<arr.length;startHere++)
+        for(let startHere=0;startHere<arr.length;startHere++)
         {
             
             //console.log(`${arr[referencePoint]} and ${arr[startHere]}`);
@@ -41,24 +33,26 @@ function groupSimilarValues(arr,refP,currentStateOfFinalArray)
                 tempArray.push(arr[startHere]);
         
             }
-
         }
-
-     // if(referencePoint > 0 && currentState[currentState.length-2][0] !== arr[refP])
-    //  {
-        console.log(arr[refP] + '----' + currentState[currentState.length-2]);
 
         if(referencePoint < (arr.length))
         {
 
-
             console.log(`before splice: ${currentState}`);
-        
-            //currentState.splice(currentState.length,0, ...tempArray);//always splices at the end of the array
             if(tempArray.length > 1)
             {
+                //I did not use if(arr[refP+1] != currentState[currentState.length-2][0]) on the line before
+                //currentState = currentState.concat([tempArray],undefined);
+                //because currentState starts-off as [] thus causing an error of 0 is undefined
                 currentState = currentState.concat([tempArray],undefined);
-            
+
+                console.log(`if ${arr[refP+1]} ==== ${currentState[currentState.length-2][0]}`);
+                console.log(`splice 2 items from ${currentState[currentState.length-2]}`);
+                if(arr[refP+1] === currentState[currentState.length-2][0])//remove array that is a duplicate of the last
+                {
+                    currentState.splice(currentState.length-2,2);
+                }
+                
             }
             else
             {
@@ -69,38 +63,17 @@ function groupSimilarValues(arr,refP,currentStateOfFinalArray)
             referencePoint++;
 
             console.log(`new value of reference point is ${referencePoint}`);
-            
-            // if(currentState[currentState.length-2].length > 1)
-            // {
-            // console.log('below is currentState[currentState.length-2]:');
-            // console.log(currentState[currentState.length-2][0]);
-            // }
-            // else
-            // {
-            //     console.log(currentState[currentState.length-2]);
-            
-            // }
             groupSimilarValues(arr,referencePoint,currentState);
             
         }
         else
         {
             currentState = removeUndefinedFromArray(currentState);
-            
-            
+
             console.log(currentState);
             return currentState;
         }
-//     }     
-//    else
-//      {
-           
-               
-            
-//         console.log(arr[refP] + '----' + currentState[currentState.length-2]);
- 
 
-//     }
 }
 
 
