@@ -25,7 +25,7 @@ function groupSimilarValues(arr,refP,currentStateOfFinalArray)
 {       
 
 
-         let referencePoint = refP;//to be used as an index of arr. arr[referencePoint] indicates which part of the inputed array we are currently processing.
+        let referencePoint = refP;//to be used as an index of arr. arr[referencePoint] indicates which part of the inputed array we are currently processing.
                                 //referencePoint gets incremented near the end of the function and the function is called again within itself, while passing the new value of refP.
                                 //Thus letting us redo the same process on the next index of arr.
         let currentState = currentStateOfFinalArray; //when recurssion of the function occurs, the last state is passed to this parameter.
@@ -61,8 +61,8 @@ function groupSimilarValues(arr,refP,currentStateOfFinalArray)
 
                                                                             //WHY I AM CONCATINATING undefined.
                 currentState = currentState.concat([tempArray],undefined);//I tried splice and push but they don't nest tempArray inside currentState.
-                                                                          //They just add the values from tempArray inside currentState.
-                                                                        //so far, this is the only method that seems to work.
+                                                                          //They just insert the values from tempArray to currentState.
+                                                                        //so far, this is the only method that allows me to insert tempArray as an array.
 
 
                 console.log(`if ${arr[refP+1]} ==== ${currentState[currentState.length-2][0]}`);
