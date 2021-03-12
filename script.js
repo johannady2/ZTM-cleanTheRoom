@@ -13,17 +13,30 @@ let cloneOriginalArray = inputArray;
 
 function organizeArray(arr)
 {
-    return arr.sort();//also sorts alphabetically. sorts numbers first, then capital letters first, then lower case letters
+    return arr.sort(comparer);//also sorts alphabetically. sorts numbers first, then capital letters first, then lower case letters
+}
+
+function comparer(a,b)
+{
+    return a-b;
 }
 
 function groupSimilarValues(arr,refP,currentStateOfFinalArray)
-{
-        let referencePoint = refP;//to be used as an index of arr. arr[referencePoint] indicates which part of the inputed array we are currently processing.
+{       
+
+
+         let referencePoint = refP;//to be used as an index of arr. arr[referencePoint] indicates which part of the inputed array we are currently processing.
                                 //referencePoint gets incremented near the end of the function and the function is called again within itself, while passing the new value of refP.
                                 //Thus letting us redo the same process on the next index of arr.
         let currentState = currentStateOfFinalArray; //when recurssion of the function occurs, the last state is passed to this parameter.
         let tempArray = []; //alwaysEmpty when function starts. This array will contain any values that are similar to arr[refP]. If tempArray.length > 1, it will then be inserted inside currentState turning currentState into an nested array.
  
+
+        if(currentState.length > 1)
+        {
+            let finalValue = [];//the value to be returned
+        }  
+
         for(let startHere=0;startHere<arr.length;startHere++)
         {
             
@@ -41,10 +54,16 @@ function groupSimilarValues(arr,refP,currentStateOfFinalArray)
             console.log(`before splice: ${currentState}`);
             if(tempArray.length > 1)
             {
+                //WHY NOT PUT AN IF STATEMENT BEFORE CONCATINATING?
                 //I did not use if(arr[refP+1] != currentState[currentState.length-2][0]) on the line before
                 //currentState = currentState.concat([tempArray],undefined);
                 //because currentState starts-off as [] thus causing an error of 0 is undefined
-                currentState = currentState.concat([tempArray],undefined);
+
+                                                                            //WHY I AM CONCATINATING undefined.
+                currentState = currentState.concat([tempArray],undefined);//I tried splice and push but they don't nest tempArray inside currentState.
+                                                                          //They just add the values from tempArray inside currentState.
+                                                                        //so far, this is the only method that seems to work.
+
 
                 console.log(`if ${arr[refP+1]} ==== ${currentState[currentState.length-2][0]}`);
                 console.log(`splice 2 items from ${currentState[currentState.length-2]}`);
@@ -64,16 +83,14 @@ function groupSimilarValues(arr,refP,currentStateOfFinalArray)
 
             console.log(`new value of reference point is ${referencePoint}`);
             groupSimilarValues(arr,referencePoint,currentState);
-            
+            return finalValue;
         }
         else
         {
             currentState = removeUndefinedFromArray(currentState);
-
-            console.log(currentState);
-            return currentState;
+            finalValue = currentState;
         }
-
+       
 }
 
 
@@ -89,4 +106,6 @@ function removeUndefinedFromArray(arrayWithUndefineds)
 
 let sortedArray =  organizeArray(inputArray);
 console.log(sortedArray);
-groupSimilarValues(sortedArray,0,[]);
+
+let groupedArray = groupSimilarValues(sortedArray,0,[]);
+console.log(groupedArray);
